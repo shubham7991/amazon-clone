@@ -1,8 +1,52 @@
+// "use client";
+// import React from "react";
+// import amazonLogo from "../public/amazon-logo.png";
+// import { FaLock } from "react-icons/fa";
+// import SingleProduct from "./SingleProduct";
+// import OrderSummary from "./OrderSummary";
+// import DeliveryAddress from "./DeliveryAddress";
+// import Image from "next/image";
+// import { useAppSelector } from "@/lib/supabase/hooks/redux";
+// import { getCart } from "@/redux/cartSlice";
+
+// const Checkout = () => {
+//     const cart=useAppSelector(getCart)
+//     let totalPrice=0;
+//     cart.forEach((item:any)=>{
+//      totalPrice+= item.price * item.quantity;
+//     })
+  
+//   return (
+//     <div className="absolute w-full top-0  bg-white p-10">
+//          <div className=" flex w-[70%] mx-auto items-center border-b border-gray-400 pb-5 justify-between ">
+//                 <div>
+//                   <Image
+//                     src={amazonLogo}
+//                     alt={"amazon-logo"}
+//                     width={150}
+//                     height={150}
+//                   />
+//                 </div>
+//                 <div>
+//                   <h1 className="font-bold text-2xl">Checkout</h1>
+//                 </div>
+//                 <div className="text-gray-400">
+//                   <FaLock size={"30px"} />
+//                 </div>
+//               </div>
+//         <div className="flex justify-between w-[70%] mx-auto">
+//         <DeliveryAddress/>
+//         <OrderSummary totalPrice={totalPrice} />
+//         </div>
+//     </div>
+//   );
+// };
+
+// export default Checkout;
 "use client";
 import React from "react";
 import amazonLogo from "../public/amazon-logo.png";
 import { FaLock } from "react-icons/fa";
-import SingleProduct from "./SingleProduct";
 import OrderSummary from "./OrderSummary";
 import DeliveryAddress from "./DeliveryAddress";
 import Image from "next/image";
@@ -10,36 +54,36 @@ import { useAppSelector } from "@/lib/supabase/hooks/redux";
 import { getCart } from "@/redux/cartSlice";
 
 const Checkout = () => {
-    const cart=useAppSelector(getCart)
-    let totalPrice=0;
-    cart.forEach((item:any)=>{
-     totalPrice+= item.price * item.quantity;
-    })
-  
+  const cart = useAppSelector(getCart) ?? [];
+
+  // ✅ no `any`, strongly typed via inference
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
   return (
-    <div className="absolute w-full top-0  bg-white p-10">
-         <div className=" flex w-[70%] mx-auto items-center border-b border-gray-400 pb-5 justify-between ">
-                <div>
-                  <Image
-                    src={amazonLogo}
-                    alt={"amazon-logo"}
-                    width={150}
-                    height={150}
-                  />
-                </div>
-                <div>
-                  <h1 className="font-bold text-2xl">Checkout</h1>
-                </div>
-                <div className="text-gray-400">
-                  <FaLock size={"30px"} />
-                </div>
-              </div>
-        <div className="flex justify-between w-[70%] mx-auto">
-        <DeliveryAddress/>
-        <OrderSummary totalPrice={totalPrice} />
+    <div className="absolute w-full top-0 bg-white p-10">
+      <div className="flex w-[70%] mx-auto items-center border-b border-gray-400 pb-5 justify-between">
+        <div>
+          <Image
+            src={amazonLogo}
+            alt="amazon-logo"
+            width={150}
+            height={150}
+          />
         </div>
+        <div>
+          <h1 className="font-bold text-2xl">Checkout</h1>
+        </div>
+        <div className="text-gray-400">
+          <FaLock size="30px" />
+        </div>
+      </div>
+      <div className="flex justify-between w-[70%] mx-auto">
+        <DeliveryAddress />
+        <OrderSummary totalPrice={totalPrice} />
+      </div>
     </div>
   );
 };
 
 export default Checkout;
+

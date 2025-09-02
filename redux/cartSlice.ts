@@ -100,14 +100,14 @@ const cartSlice = createSlice({
         item.quantity -= 1;
       }
     },
-    clearAllCart:(state)=>{
-      state.cart=[]
+    
+    clearAllCart: (state) => {
+      state.cart = [];
     }
   },
 });
 
-export const { addToCart, removeFromTheCart, incrementQuantity, decrementQuantity,clearAllCart} =
-  cartSlice.actions;
+export const { addToCart, removeFromTheCart, incrementQuantity, decrementQuantity, clearAllCart } = cartSlice.actions;
 
 export const getCart = (state: RootState) => state.cart.cart;
 

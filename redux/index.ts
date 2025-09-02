@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import cartSlice from './cartSlice'
-import { createRoot } from 'react-dom/client'
+// import { createRoot } from 'react-dom/client'
 import {
-  persistStore,
+  // persistStore,
   persistReducer,
   FLUSH,
   REHYDRATE,
