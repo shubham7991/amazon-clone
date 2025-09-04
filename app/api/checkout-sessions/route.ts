@@ -82,30 +82,30 @@
 //     return NextResponse.json({ error: err.message }, { status: 500 });
 //   }
 // }
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 
-// Only import Stripe if the key exists to prevent build errors
-let stripe: any = null;
+// Stripe instance
+let stripe: Stripe | null = null;
 let stripeInitialized = false;
 
-try {
-  if (process.env.STRIPE_SECRET_KEY) {
-    const Stripe = require('stripe').default;
-    stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2024-04-10',
-    });
-    stripeInitialized = true;
-  }
-} catch (error) {
-  console.error('Stripe initialization failed:', error);
+if (process.env.STRIPE_SECRET_KEY) {
+  stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  });
+  stripeInitialized = true;
 }
+
+type Item = {
+  title: string;
+  image: string;
+  price: number;
+};
 
 export async function POST(req: NextRequest) {
   try {
-    // Check if Stripe is configured
-    if (!stripeInitialized) {
+    if (!stripeInitialized || !stripe) {
       return NextResponse.json(
-        { error: 'Stripe payment system is not configured' },
+        { error: "Stripe payment system is not configured" },
         { status: 503 }
       );
     }
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { items, email } = body;
 
-    const arrangedItems = items.map((item: any) => ({
+    const arrangedItems = (items as Item[]).map((item) => ({
       price_data: {
         currency: "usd",
         product_data: {
@@ -136,23 +136,19 @@ export async function POST(req: NextRequest) {
       cancel_url: `${process.env.HOST}/checkout`,
       metadata: {
         email,
-        images: JSON.stringify(items.map((item: any) => item.image)),
+        images: JSON.stringify(items.map((item: Item) => item.image)),
       },
     });
 
     return NextResponse.json({ id: session.id });
-
   } catch (err: unknown) {
     console.error("Stripe checkout error:", err);
-    
-    let errorMessage = 'Internal server error';
+
+    let errorMessage = "Internal server error";
     if (err instanceof Error) {
       errorMessage = err.message;
     }
 
-    return NextResponse.json(
-      { error: errorMessage }, 
-      { status: 500 }
-    );
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
