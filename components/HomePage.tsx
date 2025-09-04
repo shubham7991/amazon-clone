@@ -74,6 +74,7 @@ const HomePage = () => {
     getMensClothing();
     getWomensClothing();
   }, [getMensClothing, getWomensClothing]);
+  // In your HomePage.tsx, add this useEffect
 
   // Add default quantity to products
   const productsWithQuantity = (products: Product[]) => {

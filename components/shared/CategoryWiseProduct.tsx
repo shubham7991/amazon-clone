@@ -93,7 +93,7 @@ const CategoryWiseProduct = ({ singleProduct }: CategoryWiseProductProps) => {
       </div>
       <div>
         <h1>{singleProduct.title}</h1>
-       <Ratings ratings={Number(ratingValue)}/>
+       {ratingValue && !isNaN(ratingValue) && <Ratings ratings={ratingValue}/>}
       </div>
       <div className="my-2">
         <button 
