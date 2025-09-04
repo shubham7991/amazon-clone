@@ -1,11 +1,10 @@
 // types/product.ts
 export interface Product {
-  id: string | number; // This accepts both string and number
+  id: string | number;
   title: string;
   price: number;
   description?: string;
   image?: string;
   category?: string;
-  rating?: number;
-  // Note: quantity is NOT included here since it's added dynamically
+  rating?: number | { rate: number; count: number }; // Allow both formats
 }

@@ -54,18 +54,22 @@ import Ratings from "./Ratings";
 import { useAppDispatch } from "../AddToCartContainer";
 import { addToCart } from "@/redux/cartSlice";
 import { useRouter } from "next/navigation";
-import { Product } from "@/types/product"; // Import Product type
+import { Product } from "@/types/product";
 
 interface CategoryWiseProductProps {
-  singleProduct: Product; // Change from CartItem to Product
+  singleProduct: Product;
 }
 
 const CategoryWiseProduct = ({ singleProduct }: CategoryWiseProductProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   
+  // Extract rating value properly
+  const ratingValue = typeof singleProduct.rating === 'object' 
+    ? singleProduct.rating.rate 
+    : singleProduct.rating;
+
   const handleAddToCart = () => {
-    // Add quantity when adding to cart
     const productWithQuantity = {
       ...singleProduct,
       quantity: 1
@@ -89,7 +93,7 @@ const CategoryWiseProduct = ({ singleProduct }: CategoryWiseProductProps) => {
       </div>
       <div>
         <h1>{singleProduct.title}</h1>
-        <Ratings ratings={singleProduct.rating}/>
+       <Ratings ratings={Number(ratingValue)}/>
       </div>
       <div className="my-2">
         <button 
